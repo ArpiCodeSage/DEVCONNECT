@@ -1,4 +1,4 @@
-// This file is the REST API Controller (The Front Door) for authentication.
+// This file is the REST API Controller (The Front Door) for authentication. Handles user entry into the app.
 
 // Its job is to expose HTTP web addresses (/api/auth/register and /api/auth/login) so that external apps (like our React frontend or Postman) can send HTTP POST requests to register new users or log in!
 package com.ari.devconnect.controller;

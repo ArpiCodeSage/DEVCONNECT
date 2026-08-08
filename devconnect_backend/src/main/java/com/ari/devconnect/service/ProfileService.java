@@ -42,7 +42,7 @@ public class ProfileService {
     {
         User user=userRepository.findByUsername(username).orElseThrow(()->new RuntimeException("user not found with username:"+username));
         Profile profile=user.getProfile();
-        if(profile==null)
+        if(profile==null)  
         {
             profile=new Profile();
             profile.setUser(user);

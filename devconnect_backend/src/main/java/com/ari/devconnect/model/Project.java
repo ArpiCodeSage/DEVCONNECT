@@ -19,6 +19,7 @@ public class Project {
     private Long id;
     @Column(columnDefinition="TEXT",nullable=false)
     private String description;
+    private String title;
     private String techStack;
     private String githubUrl;
     private String demoUrl;
@@ -27,18 +28,21 @@ public class Project {
     @JoinColumn(name="user_id",nullable=false)
     private User user;
     public Project() {}
-    public void Project(Long id,String description,String techStack,String githubIrl,String demoUrl){
+    public  Project(Long id,String title,String description,String techStack,String githubUrl,String demoUrl){
         this.id=id;
+        this.title=title;
         this.description=description;
         this.techStack=techStack;
         this.githubUrl=githubUrl;
         this.demoUrl=demoUrl;
 
     }
+     public String getTitle() { return title; }
+    public void setTitle(String title) { this.title = title; }
     public Long getId(){
         return id;
     }
-    public String getDesc(){
+    public String getDescription(){
         return description;
     }
     public String getTechStack(){
@@ -46,6 +50,21 @@ public class Project {
     }
     public String getGithubUrl(){
         return githubUrl;
+    }
+    public void setId(Long id)
+    {
+        this.id=id;
+    }
+    public void setDescription(String description){
+        this.description=description;
+    }
+    public void setTechStack(String techStack)
+    {
+        this.techStack=techStack;
+    }
+    public void setGithubUrl(String githubUrl)
+    {
+        this.githubUrl=githubUrl;
     }
      public String getDemoUrl() { return demoUrl; }
     public void setDemoUrl(String demoUrl) { this.demoUrl = demoUrl; }
