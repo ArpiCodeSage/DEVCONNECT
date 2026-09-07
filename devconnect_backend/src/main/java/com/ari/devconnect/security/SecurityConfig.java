@@ -14,21 +14,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;//he ind
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;//he chain of security filters that every web request passes through when hitting your server.
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import java.util.List;
 
 @Configuration//declares SecurityConfig as a Spring configuration class
 public class SecurityConfig {
+
     private final JwtTokenProvider tokenProvider;
     private final CustomUserDetailsService customUserDetailsService;
-    public SecurityConfig(JwtTokenProvider tokenProvider,CustomUserDetailsService customUserDetailsService)
-    {
-        this.tokenProvider=tokenProvider;
-        this.customUserDetailsService=customUserDetailsService;
+
+    public SecurityConfig(JwtTokenProvider tokenProvider, CustomUserDetailsService customUserDetailsService) {
+        this.tokenProvider = tokenProvider;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
-    @Bean 
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
-        return new  JwtAuthenticationFilter(tokenProvider,customUserDetailsService);
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(tokenProvider, customUserDetailsService);
     }
 
     @Bean
@@ -43,23 +47,35 @@ public class SecurityConfig {
     }
     //Exposes Spring's built-in AuthenticationManager as a bean so our AuthService can call it during user login to check credentials
 
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOriginPattern("http://localhost:*");
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     //defines the master security rules for incoming HTTP requests
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())//Disables Cross-Site Request Forgery cookies. We don't need CSRF cookies because JWT tokens are stateless.
-                .cors(cors->cors.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//Tells Spring Boot: "Never store user sessions in memory on the server. Every request must be verified independently with a JWT token."Scalability! If you have 100,000 active users, storing 100,000 sessions in server RAM will crash your server or slow it down.
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//Tells Spring Boot: "Never store user sessions in memory on the server. Every request must be verified independently with a JWT token."Scalability! If you have 100,000 active users, storing 100,000 sessions in server RAM will crash your server or slow it down.
                 // With stateless JWTs, 1,000,000 users can use your app without using 1 single byte of server memory!
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/api/auth/**").permitAll()//Makes all auth URLs (Web addresses used for signing up or logging in: like /api/auth/register and /api/auth/login) PUBLIC. Anyone can access them without a token! otherwise new users aka w/o any token would never be able to log in
+                .authorizeHttpRequests(auth -> auth
+    .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+    .requestMatchers("/api/auth/**").permitAll()
+    //Makes all auth URLs (Web addresses used for signing up or logging in: like /api/auth/register and /api/auth/login) PUBLIC. Anyone can access them without a token! otherwise new users aka w/o any token would never be able to log in
                 .anyRequest().authenticated());//Makes EVERY OTHER ENDPOINT (like /api/projects, /api/profiles) PRIVATE. Access requires a valid JWT token!
-        
+
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-                return http.build();//Finalizes and builds the security configuration chain.
+        return http.build();//Finalizes and builds the security configuration chain.
 
     }
-
-    
 
 }
 
@@ -83,9 +99,6 @@ public class SecurityConfig {
 // Because evil-games.com cannot look inside devconnect.com's memory, it cannot grab your JWT token!
 //Chrome does NOT attach JWT tokens automatically.
 // For the token to be included, evil-games.com would have to READ the token out of your React memory first—which is BLOCKED by the Same-Origin Policy!
-
-
-
 //BEAN:
 // In standard Java, whenever you want to use an object, you create it manually using new: MyService service = new MyService();
 // In Spring Boot, Spring manages objects for you automatically.
@@ -93,33 +106,19 @@ public class SecurityConfig {
 // 💡 The Coffee Shop Analogy:
 // Standard Java: You buy coffee beans, roast them yourself, grind them yourself, and brew the coffee manually.
 // Spring Bean: You press a button at an automatic espresso machine (@Bean), and Spring Boot prepares the coffee, holds it in memory, and hands it to whoever asks for it!
-    
-
-
-
 // How Spring Security blocks users behind the scenes:
-
 // When SecurityConfig builds http.build(), Spring Security creates an internal Filter Chain (a series of 15+ built-in security guards) that wraps around your server.
-
 // When an HTTP request hits a private URL (like GET /api/profiles/me):
 //  Spring Security's FilterSecurityInterceptor guard checks the request.
 // Because .anyRequest().authenticated() was set in SecurityConfig, it checks if the request has a valid login proof.(this proof is obtained from jwtauthfilter.java)
 // If NO proof is present: Spring Security immediately stops the request and returns HTTP 401 Unauthorized (Access Denied) before your controller code is even touched!
-
-
-
-
-
 // Spring Security has a default filter called UsernamePasswordAuthenticationFilter that expects traditional session login forms.
-
 // Because we use stateless JWT tokens:
-
 // When an HTTP request comes in with a JWT token header (Authorization: Bearer <token>), we want our JwtAuthenticationFilter to intercept and verify the token FIRST.
 // If our JwtAuthenticationFilter verifies the token, it sets the proof in SecurityContextHolder.
 // Now, when the request reaches UsernamePasswordAuthenticationFilter and .anyRequest().authenticated(), Spring Security sees the proof in memory and immediately grants access!
 // If we didn't add .addFilterBefore(...), Spring Security wouldn't know when to execute our custom JWT filter, and requests to private endpoints would keep failing with 401 Unauthorized.
 // If you don't write http.addFilterBefore(...):
-
 // Guard A (your JWT filter) is standing in the cafeteria doing nothing because nobody told him where his post is in the line.
 // A passenger walks up to Guard B.
 // Guard B looks at the passenger's hand: No stamp! (because Guard A never checked them).

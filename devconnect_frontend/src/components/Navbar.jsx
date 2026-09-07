@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Coffee, User, LogOut, Compass, LogIn, UserPlus } from 'lucide-react';
+import { GitCommit } from 'lucide-react';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -14,59 +14,54 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="m-4 px-6 py-3.5 bg-[#241e1b]/90 backdrop-blur-md border border-[#3b322c] rounded-2xl flex justify-between items-center shadow-xl">
-      {/* Brand Logo */}
-      <Link to="/" className="flex items-center gap-2.5 text-lg font-bold text-[#f3eae1] hover:opacity-90">
-        <div className="w-8 h-8 rounded-xl bg-[#3b322c] border border-[#52463e] flex items-center justify-center text-[#d97706]">
-          <Coffee size={18} />
+    <header className="border-b border-slate-800/60 bg-[#0b0f19]/90 backdrop-blur-md px-8 py-4 flex justify-between items-center sticky top-0 z-50">
+      
+      {/* ⚡ Perfectly Styled Pipeline Logo */}
+      <Link to="/" className="flex items-center gap-2.5 group">
+        <div className="w-9 h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-cyan-400 group-hover:border-cyan-500/50 transition duration-200">
+          <GitCommit size={20} className="text-cyan-400" />
         </div>
-        <span className="font-serif">dev<span className="text-[#d97706]">.cabin</span>🌲</span>
+        <span className="text-xl font-extrabold tracking-tight text-white">
+          Dev<span className="bg-gradient-to-r from-indigo-400 to-cyan-400 bg-clip-text text-transparent">Connect</span>
+        </span>
       </Link>
 
-      {/* Nav Links */}
-      <div className="flex items-center gap-5 text-sm font-sans font-medium">
-        <Link to="/feed" className="flex items-center gap-1.5 text-[#c4b5fd] hover:text-[#d97706] transition">
-          <Compass size={16} />
-          <span>explore</span>
+      {/* Nav Links Mapped to Theme */}
+      <div className="flex items-center gap-6 text-sm font-medium">
+        <Link to="/feed" className="text-slate-300 hover:text-white transition">
+          Projects
         </Link>
 
         {token ? (
           <>
-            <Link to={`/profile/${username}`} className="flex items-center gap-1.5 text-[#e5d5c5] hover:text-[#d97706] transition">
-              <User size={16} />
-              <span>{username || 'profile'}</span>
+            <Link to={`/profile/${username}`} className="text-slate-300 hover:text-white transition">
+              {username || 'Profile'}
             </Link>
             
             <button 
               type="button" 
               onClick={handleLogout} 
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-[#4a3f37] hover:bg-[#322a25] text-[#e5d5c5] transition cursor-pointer"
+              className="px-4 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 text-slate-300 transition cursor-pointer"
             >
-              <LogOut size={15} />
-              <span>logout</span>
+              Logout
             </button>
           </>
         ) : (
           <>
-            <Link 
-              to="/login" 
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl border border-[#4a3f37] hover:bg-[#322a25] text-[#e5d5c5] transition"
-            >
-              <LogIn size={15} />
-              <span>login</span>
+            <Link to="/login" className="text-slate-300 hover:text-white transition">
+              Login
             </Link>
 
             <Link 
               to="/register" 
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-[#d97706] hover:bg-[#b45309] text-white font-semibold shadow-md shadow-[#d97706]/20 transition"
+              className="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium shadow-md shadow-indigo-600/20 transition"
             >
-              <UserPlus size={15} />
-              <span>join cabin</span>
+              Register
             </Link>
           </>
         )}
       </div>
-    </nav>
+    </header>
   );
 };
 

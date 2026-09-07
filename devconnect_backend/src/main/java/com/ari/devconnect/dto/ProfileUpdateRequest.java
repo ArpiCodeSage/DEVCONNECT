@@ -17,6 +17,7 @@ public class ProfileUpdateRequest {
     this.githubUrl=githubUrl;
     this.skills=skills;
     this.bio=bio;
+    this.avatarUrl=avatarUrl;
 }
   
     public String getHeadline() { return headline; }
