@@ -6,6 +6,8 @@ import LoginPage from './pages/LoginPage';
 import { ArrowRight, Code2 } from 'lucide-react';
 import ProfilePage from './pages/ProfilePage';
 import EditProfilePage from './pages/EditProfilePage';
+import ProjectForm from './components/ProjectForm';
+import ProjectFeedPage from './pages/ProjectFeedPage';
 
 const Home = () => (
   <div className="relative min-h-[85vh] w-full flex flex-col items-center justify-center text-center px-4 overflow-hidden">
@@ -62,11 +64,12 @@ function App() {
         <main>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/feed" element={<Home />} />
+            <Route path="/feed" element={<ProjectFeedPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile/edit" element={<EditProfilePage />}/>
             <Route path="/profile/:username" element={<ProfilePage />} />
+            <Route path="/projects/create" element={<ProjectForm />} />
           </Routes>
         </main>
       </div>

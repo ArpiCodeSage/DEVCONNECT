@@ -25,17 +25,17 @@ public class ProfileService {
 // That string "ari_dev" gets passed into getProfileByUsername("ari_dev")
         User user = userRepository.findByUsername(username).orElseThrow(() -> new RuntimeException("user not found with username:" + username));
         Profile profile = user.getProfile();
-        return new ProfileResponse(//to be sent back to React as JSON
-                user.getUsername(),
-                user.getEmail(),
-                profile != null ? profile.getHeadline() : null,
-                profile != null ? profile.getBio() : null,
-                profile != null ? profile.getSkills() : null,
-                profile != null ? profile.getLinkedinUrl() : null,
-                profile != null ? profile.getGithubUrl() : null,
-                profile != null ? profile.getWebsiteUrl() : null,
-                profile != null ? profile.getAvatarUrl() : null
-        );
+       return new ProfileResponse( //to get back to React as JSON
+        user.getUsername(),
+        user.getEmail(),
+        profile != null ? profile.getHeadline() : null,
+        profile != null ? profile.getBio() : null,
+        profile != null ? profile.getSkills() : null,
+        profile != null ? profile.getGithubUrl() : null,
+        profile != null ? profile.getWebsiteUrl() : null,
+        profile != null ? profile.getAvatarUrl() : null,
+        profile != null ? profile.getLinkedinUrl() : null
+);
     }
 
     public ProfileResponse updateProfile(String username,ProfileUpdateRequest request)//update logged-in user's profile

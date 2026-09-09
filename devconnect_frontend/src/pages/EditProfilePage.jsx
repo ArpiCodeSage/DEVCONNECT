@@ -14,7 +14,7 @@ import {
 
 function EditProfilePage() {
 
-    navigate = useNavigate()
+    const navigate = useNavigate()
 
     const [formData, setFormData] = useState({
         username: '',
@@ -51,7 +51,7 @@ function EditProfilePage() {
         try {
             const response = await API.put("/profiles/me", formData)
             console.log("Updated profile:", response.data)
-            setSuccess(response.data || "Profile updated successfully!")
+            setSuccess("Profile updated successfully!")
             setTimeout(() => {
                 navigate(`/profile/${response.data.username}`)
             }, 1500)
@@ -69,8 +69,7 @@ function EditProfilePage() {
     }
 
 
-
-    return (
+ return (
         <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
 
             <div className="w-full max-w-2xl bg-[#0f172a]/90 backdrop-blur-md border border-slate-800 p-8 rounded-2xl shadow-2xl">
@@ -92,7 +91,7 @@ function EditProfilePage() {
 
                 </div>
 
-                {/* Error Alert */}
+                {/* Error */}
                 {error && (
                     <div className="mb-6 p-3 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-medium flex items-center gap-2">
                         <AlertCircle size={16} />
@@ -100,7 +99,7 @@ function EditProfilePage() {
                     </div>
                 )}
 
-                {/* Success Alert */}
+                {/* Success */}
                 {success && (
                     <div className="mb-6 p-3 rounded-lg bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-medium flex items-center gap-2">
                         <CheckCircle2 size={16} />
@@ -111,83 +110,21 @@ function EditProfilePage() {
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-5">
 
-                    {/* Name + Username */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                    {/* Username */}
+                    <div>
+                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+                            Username
+                        </label>
 
-                        <div>
-                            <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                                Name
-                            </label>
-
-                            <input
-                                type="text"
-                                name="name"
-                                required
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder="Your Name"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                                Username
-                            </label>
-
-                            <input
-                                type="text"
-                                name="username"
-                                required
-                                value={formData.username}
-                                onChange={handleChange}
-                                placeholder="dev_username"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                            />
-                        </div>
-
-                    </div>
-
-                    {/* Role + Location */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-
-                        <div>
-                            <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                                Role
-                            </label>
-
-                            <input
-                                type="text"
-                                name="role"
-                                value={formData.role}
-                                onChange={handleChange}
-                                placeholder="Software Developer"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
-                                Location
-                            </label>
-
-                            <div className="relative">
-                                <MapPin
-                                    size={18}
-                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
-                                />
-
-                                <input
-                                    type="text"
-                                    name="location"
-                                    value={formData.location}
-                                    onChange={handleChange}
-                                    placeholder="Your Location"
-                                    className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                                />
-                            </div>
-                        </div>
-
+                        <input
+                            type="text"
+                            name="username"
+                            required
+                            value={formData.username}
+                            onChange={handleChange}
+                            placeholder="dev_username"
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
+                        />
                     </div>
 
                     {/* Email */}
@@ -202,6 +139,22 @@ function EditProfilePage() {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="you@example.com"
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
+                        />
+                    </div>
+
+                    {/* Headline */}
+                    <div>
+                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+                            Headline
+                        </label>
+
+                        <input
+                            type="text"
+                            name="headline"
+                            value={formData.headline}
+                            onChange={handleChange}
+                            placeholder="Full Stack Developer"
                             className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
                         />
                     </div>
@@ -248,20 +201,14 @@ function EditProfilePage() {
                             GitHub
                         </label>
 
-                        <div className="relative">
-                            <a href={profile.github} target="_blank" rel="noreferrer">
-                                GitHub
-                            </a>
-
-                            <input
-                                type="text"
-                                name="github"
-                                value={formData.github}
-                                onChange={handleChange}
-                                placeholder="https://github.com/username"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                            />
-                        </div>
+                        <input
+                            type="url"
+                            name="githubUrl"
+                            value={formData.githubUrl}
+                            onChange={handleChange}
+                            placeholder="https://github.com/username"
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
+                        />
                     </div>
 
                     {/* LinkedIn */}
@@ -270,49 +217,55 @@ function EditProfilePage() {
                             LinkedIn
                         </label>
 
-                        <div className="relative">
-
-                            <a
-                                href={profile.linkedin}
-                                target="_blank"
-                                rel="noreferrer"
-                                className="text-cyan-400 hover:underline"
-                            >
-                                LinkedIn
-                            </a>
-
-                            <input
-                                type="text"
-                                name="linkedin"
-                                value={formData.linkedin}
-                                onChange={handleChange}
-                                placeholder="https://linkedin.com/in/username"
-                                className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
-                            />
-                        </div>
+                        <input
+                            type="url"
+                            name="linkedinUrl"
+                            value={formData.linkedinUrl}
+                            onChange={handleChange}
+                            placeholder="https://linkedin.com/in/username"
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
+                        />
                     </div>
 
-                    {/* Portfolio */}
+                    {/* Website */}
                     <div>
                         <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
                             Portfolio Website
                         </label>
 
                         <div className="relative">
+
                             <Globe
                                 size={18}
                                 className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500"
                             />
 
                             <input
-                                type="text"
-                                name="portfolio"
-                                value={formData.portfolio}
+                                type="url"
+                                name="websiteUrl"
+                                value={formData.websiteUrl}
                                 onChange={handleChange}
                                 placeholder="https://yourportfolio.com"
                                 className="w-full bg-slate-900 border border-slate-800 rounded-lg pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
                             />
+
                         </div>
+                    </div>
+
+                    {/* Avatar URL */}
+                    <div>
+                        <label className="block text-xs font-mono uppercase tracking-wider text-slate-400 mb-1.5">
+                            Avatar URL
+                        </label>
+
+                        <input
+                            type="url"
+                            name="avatarUrl"
+                            value={formData.avatarUrl}
+                            onChange={handleChange}
+                            placeholder="https://example.com/profile.jpg"
+                            className="w-full bg-slate-900 border border-slate-800 rounded-lg px-4 py-2.5 text-sm text-white placeholder-slate-600 focus:outline-none focus:border-cyan-500 transition"
+                        />
                     </div>
 
                     {/* Buttons */}
@@ -332,7 +285,7 @@ function EditProfilePage() {
                             className="w-1/2 py-2.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-medium text-sm transition shadow-lg shadow-cyan-600/20 disabled:opacity-50 cursor-pointer flex items-center justify-center gap-2"
                         >
                             <Save size={16} />
-                            {loading ? 'Saving...' : 'Save Changes'}
+                            {loading ? "Saving..." : "Save Changes"}
                         </button>
 
                     </div>
@@ -342,5 +295,5 @@ function EditProfilePage() {
             </div>
         </div>
     );
-};
+}
 export default EditProfilePage;
