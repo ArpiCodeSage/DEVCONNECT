@@ -3,7 +3,9 @@
 
 package com.ari.devconnect.repository;
 import java.util.Optional;
-
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ari.devconnect.model.User;
@@ -18,12 +20,20 @@ public interface UserRepository extends JpaRepository<User, Long>
    Optional<User> findByEmail(String email);
    Boolean existsByUsername(String username);
    Boolean existsByEmail(String email);
+   @Query("""
+    SELECT u
+    FROM User u
+    JOIN u.profile p
+    WHERE LOWER(p.skills) LIKE LOWER(CONCAT('%', :query, '%'))
+    OR LOWER(u.username) LIKE LOWER(CONCAT('%', :query, '%'))
+""")
+List<User> searchUsersBySkills(@Param("query") String query);
 
-   
+}
 //we don't need a profile repo cuz we have onetoone b/w profile and java
 //JpaRepository is a pre-built interface in Spring Data JPA that provides ready-to-use methods 
 // for database tasks, meaning saving, finding, updating, and deleting records without writing SQL.
-}
+
 // In Java:
 
 // A class contains both data and the actual implementation code (how things are done).

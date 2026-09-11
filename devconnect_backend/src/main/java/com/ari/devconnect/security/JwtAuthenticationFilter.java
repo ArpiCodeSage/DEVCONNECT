@@ -55,10 +55,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {//extends Onc
     }
 
     @Override//OncePerRequestFilter (the base class we extended) has a built-in method called shouldNotFilter(). and Spring Security's internal framework engine calls it automatically beofre calling doFilterInternal
-    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
-        String path = request.getServletPath();
-        return path.startsWith("/api/auth");
-    }
+   protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+    String path = request.getServletPath();
+return path.startsWith("/api/auth")
+            || path.startsWith("/api/uploads")
+            || path.startsWith("/uploads");
+}
 }
 // A Servlet is Java's low-level Web Server Listener.
 

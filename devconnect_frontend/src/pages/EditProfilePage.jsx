@@ -1,7 +1,7 @@
 //CHANGE THE PROFILE
 
-import React, { useState } from "react";
-import { useAsyncError, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import API from '../axios';
 import {
     User,
@@ -9,7 +9,7 @@ import {
     AlertCircle,
     CheckCircle2,
     Globe,
-    MapPin
+    Trash2
 } from 'lucide-react';
 
 function EditProfilePage() {
@@ -32,6 +32,34 @@ function EditProfilePage() {
     const [loading, setLoading] = useState(false)
     const [success, setSuccess] = useState('')
     const [error, setError] = useState('')
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const username = localStorage.getItem("username");
+
+                const response = await API.get(`/profiles/${username}`);
+
+                const profile = response.data;
+
+                setFormData({
+                    username: profile.username || '',
+                    email: profile.email || '',
+                    headline: profile.headline || '',
+                    linkedinUrl: profile.linkedinUrl || '',
+                    githubUrl: profile.githubUrl || '',
+                    websiteUrl: profile.websiteUrl || '',
+                    avatarUrl: profile.avatarUrl || '',
+                    bio: profile.bio || '',
+                    skills: profile.skills || ''
+                });
+
+            } catch (err) {
+                console.error("Failed to load profile:", err);
+            }
+        };
+
+        fetchProfile();
+    }, []);
 
     const handleChange = (e) => {
         setFormData({
@@ -66,10 +94,45 @@ function EditProfilePage() {
             setLoading(false)
         }
 
+
     }
+    const handleDeleteAccount = async () => {
+
+        const confirmed = window.confirm(
+            "Are you sure you want to delete your account? This will permanently delete your profile, projects, blogs, likes, and comments. This action cannot be undone."
+        );
+
+        if (!confirmed) {
+            return;
+        }
+
+        try {
+
+            await API.delete("/users/me");
+
+            // Remove authentication information
+            localStorage.removeItem("token");
+            localStorage.removeItem("username");
+
+            alert("Your account has been deleted successfully.");
+
+            // Go back to login page
+            navigate("/login");
+
+        } catch (err) {
+
+            console.error("Failed to delete account:", err);
+
+            setError(
+                err.response?.data?.message ||
+                err.response?.data?.error ||
+                "Failed to delete account. Please try again."
+            );
+        }
+    };
 
 
- return (
+    return (
         <div className="min-h-[80vh] flex items-center justify-center px-4 py-12">
 
             <div className="w-full max-w-2xl bg-[#0f172a]/90 backdrop-blur-md border border-slate-800 p-8 rounded-2xl shadow-2xl">
@@ -291,6 +354,52 @@ function EditProfilePage() {
                     </div>
 
                 </form>
+                {/* Danger Zone */}
+                <div className="mt-10 pt-8 border-t border-red-500/20">
+
+                    <div className="mb-4">
+
+                        <h3 className="text-lg font-semibold text-red-400">
+                            Danger Zone
+                        </h3>
+
+                        <p className="text-sm text-slate-500 mt-1">
+                            Permanently delete your account and all associated data.
+                        </p>
+
+                    </div>
+
+                    <div className="bg-red-500/5 border border-red-500/20 rounded-xl p-5">
+
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+
+                            <div>
+
+                                <h4 className="text-sm font-medium text-white">
+                                    Delete Account
+                                </h4>
+
+                                <p className="text-xs text-slate-500 mt-1">
+                                    Your profile, projects, blogs, likes, and comments
+                                    will be permanently deleted.
+                                </p>
+
+                            </div>
+
+                            <button
+                                type="button"
+                                onClick={handleDeleteAccount}
+                                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 hover:bg-red-500 hover:text-white transition text-sm font-medium cursor-pointer"
+                            >
+                                <Trash2 size={16} />
+                                Delete Account
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
 
             </div>
         </div>

@@ -36,4 +36,16 @@ public class BlogLikeController {
 
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/{blogId}/like")
+public ResponseEntity<BlogLikeResponse> getLikeStatus(
+        @PathVariable Long blogId,
+        @AuthenticationPrincipal UserDetails userDetails
+) {
+
+    String username = userDetails.getUsername();
+
+    return ResponseEntity.ok(
+            blogLikeService.getLikeStatus(blogId, username)
+    );
+}
 }

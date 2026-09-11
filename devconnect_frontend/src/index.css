@@ -27,3 +27,52 @@ body {
   stroke-dasharray: 20, 10;
   animation: pipelinePulse 12s linear infinite;
 }
+.blog-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 24px auto;
+    border-radius: 8px;
+}
+
+.blog-content p {
+    margin-bottom: 16px;
+}
+
+.blog-content h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    margin-top: 28px;
+    margin-bottom: 16px;
+}
+
+.blog-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+    margin-top: 24px;
+    margin-bottom: 12px;
+}
+
+.blog-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.blog-content blockquote {
+    border-left: 3px solid #64748b;
+    padding-left: 16px;
+    margin: 20px 0;
+    color: #94a3b8;
+}
+
+.blog-content pre {
+    background: #0b0f19;
+    padding: 16px;
+    overflow-x: auto;
+    margin: 20px 0;
+}

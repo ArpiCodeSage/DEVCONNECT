@@ -84,4 +84,27 @@ public class BlogLikeService {
                 likedByCurrentUser
         );
     }
+    public BlogLikeResponse getLikeStatus(Long blogId, String username) {
+
+    Blog blog = blogRepository.findById(blogId)
+            .orElseThrow(() -> new RuntimeException("Blog not found"));
+
+    long likeCount = blogLikeRepository.countByBlogId(blogId);
+
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    Optional<BlogLike> existingLike =
+            blogLikeRepository.findByUserIdAndBlogId(
+                    user.getId(),
+                    blogId
+            );
+
+    boolean liked = existingLike.isPresent();
+
+    return new BlogLikeResponse(
+            likeCount,
+            liked
+    );
+}
 }

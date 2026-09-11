@@ -4,10 +4,8 @@
 
 import axios from 'axios';//Imports the axios library, which is the industry-standard JavaScript tool used to make HTTP requests (GET, POST, PUT, DELETE) from React to Spring Boot.
 const API=axios.create({
-    baseURL:'http://localhost:8080/api',//default base URL for all backend requests
-    headers:{
-        'Content-Type':'application/json'// Tells Spring Boot that all outgoing data payloads sent from React will be formatted as JSON.
-    }
+    baseURL:'http://localhost:8080/api'//default base URL for all backend requests
+   
 })
 API.interceptors.request.use((config)=>{//An interceptor is like a middleman checkpoint. It intercepts EVERY SINGLE OUTGOING HTTP REQUEST right before it leaves React to head over the network to Spring Boot.
     const token=localStorage.getItem('token');//Reads the saved JWT token string out of the browser's localStorage.

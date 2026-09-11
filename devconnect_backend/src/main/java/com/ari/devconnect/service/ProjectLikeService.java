@@ -83,4 +83,21 @@ public class ProjectLikeService {
                 likedByCurrentUser
         );
     }
+    public ProjectLikeResponse getLikeStatus(Long projectId, String username) {
+
+    Project project = projectRepository.findById(projectId)
+            .orElseThrow(() -> new RuntimeException("Project not found"));
+
+    long likeCount = projectLikeRepository.countByProjectId(projectId);
+
+    User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+    Optional<ProjectLike> existingLike =
+            projectLikeRepository.findByUserIdAndProjectId(user.getId(), projectId);
+
+    boolean liked = existingLike.isPresent();
+
+    return new ProjectLikeResponse(likeCount, liked);
+}
 }

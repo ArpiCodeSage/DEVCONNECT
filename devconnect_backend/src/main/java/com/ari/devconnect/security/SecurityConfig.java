@@ -67,9 +67,12 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//Tells Spring Boot: "Never store user sessions in memory on the server. Every request must be verified independently with a JWT token."Scalability! If you have 100,000 active users, storing 100,000 sessions in server RAM will crash your server or slow it down.
                 // With stateless JWTs, 1,000,000 users can use your app without using 1 single byte of server memory!
                 .authorizeHttpRequests(auth -> auth
-    .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
-    .requestMatchers("/api/auth/**").permitAll()
-    //Makes all auth URLs (Web addresses used for signing up or logging in: like /api/auth/register and /api/auth/login) PUBLIC. Anyone can access them without a token! otherwise new users aka w/o any token would never be able to log in
+                .requestMatchers(org.springframework.http.HttpMethod.OPTIONS, "/**").permitAll()
+                .requestMatchers("/api/auth/**").permitAll()
+                //Makes all auth URLs (Web addresses used for signing up or logging in: like /api/auth/register and /api/auth/login) PUBLIC. Anyone can access them without a token! otherwise new users aka w/o any token would never be able to log in
+                .requestMatchers("/api/uploads/**").permitAll()
+                .requestMatchers("/api/search").permitAll()
+                .requestMatchers("/error").permitAll()
                 .anyRequest().authenticated());//Makes EVERY OTHER ENDPOINT (like /api/projects, /api/profiles) PRIVATE. Access requires a valid JWT token!
 
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);

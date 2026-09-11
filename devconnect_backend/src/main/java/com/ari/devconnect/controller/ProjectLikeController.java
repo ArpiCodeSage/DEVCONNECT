@@ -34,4 +34,20 @@ public class ProjectLikeController {
 
         return ResponseEntity.ok(response);
     }
+    @GetMapping("/{projectId}/like")
+public ResponseEntity<ProjectLikeResponse> getLikeStatus(
+        @PathVariable Long projectId,
+        @AuthenticationPrincipal UserDetails userDetails
+) {
+
+    String username = userDetails.getUsername();
+
+    ProjectLikeResponse response =
+            projectLikeService.getLikeStatus(
+                    projectId,
+                    username
+            );
+
+    return ResponseEntity.ok(response);
+}
 }

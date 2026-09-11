@@ -36,10 +36,19 @@ const LoginPage=()=>{
                 window.location.reload()
             },1500)
         }
-        catch(err)
-        {
-            setError(err.response?.data?.message || err.response?.data || 'Invalid username or password.')
-        }
+       catch (error) {
+    console.error("Login failed:", error);
+
+    if (error.response?.status === 403) {
+        setError("Invalid username or password.");
+    } else {
+        setError(
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            "Login failed. Please try again."
+        );
+    }
+}
         finally{
             setLoading(false)
         }
