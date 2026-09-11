@@ -1,3 +1,4 @@
+```jsx
 import React, {
   useEffect,
   useRef,
@@ -134,99 +135,111 @@ function BlogFormPage() {
   // -----------------------------
   // IMAGE UPLOAD
   // -----------------------------
-```javascript
-const handleImageUpload = () => {
 
-  const input =
-    document.createElement("input");
+  const handleImageUpload = () => {
 
-  input.setAttribute(
-    "type",
-    "file"
-  );
+    const input =
+      document.createElement("input");
 
-  input.setAttribute(
-    "accept",
-    "image/*"
-  );
+    input.setAttribute(
+      "type",
+      "file"
+    );
 
-  input.click();
+    input.setAttribute(
+      "accept",
+      "image/*"
+    );
+
+    input.click();
 
 
-  input.onchange = async () => {
+    input.onchange = async () => {
 
-    const file = input.files[0];
+      const file = input.files[0];
 
-    if (!file) {
-      return;
-    }
+      if (!file) {
+        return;
+      }
 
-    try {
+      try {
 
-      setUploadingImage(true);
+        setUploadingImage(true);
 
-      const imageData =
-        new FormData();
+        const imageData =
+          new FormData();
 
-      imageData.append(
-        "image",
-        file
-      );
-
-      // UPLOAD IMAGE TO BACKEND
-      const response =
-        await API.post(
-          "/uploads/image",
-          imageData
+        imageData.append(
+          "image",
+          file
         );
 
-      // CREATE FULL PRODUCTION IMAGE URL
-      const imageUrl =
-        response.data.startsWith("http")
-          ? response.data
-          : `https://devconnect-backend-m0un.onrender.com${response.data}`;
+
+        // UPLOAD IMAGE TO BACKEND
+
+        const response =
+          await API.post(
+            "/uploads/image",
+            imageData
+          );
 
 
-      const editor =
-        quillRef.current.getEditor();
+        // CREATE FULL PRODUCTION IMAGE URL
+
+        let imageUrl;
+
+        if (response.data.startsWith("http")) {
+
+          imageUrl = response.data;
+
+        } else {
+
+          imageUrl =
+            `https://devconnect-backend-m0un.onrender.com${response.data}`;
+
+        }
 
 
-      const range =
-        editor.getSelection(true);
+        const editor =
+          quillRef.current.getEditor();
 
 
-      editor.insertEmbed(
-        range.index,
-        "image",
-        imageUrl
-      );
+        const range =
+          editor.getSelection(true);
 
 
-      editor.setSelection(
-        range.index + 1
-      );
+        editor.insertEmbed(
+          range.index,
+          "image",
+          imageUrl
+        );
 
 
-    } catch (error) {
+        editor.setSelection(
+          range.index + 1
+        );
 
-      console.error(
-        "Failed to upload image:",
-        error
-      );
 
-      alert(
-        "Failed to upload image."
-      );
+      } catch (error) {
 
-    } finally {
+        console.error(
+          "Failed to upload image:",
+          error
+        );
 
-      setUploadingImage(false);
+        alert(
+          "Failed to upload image."
+        );
 
-    }
+      } finally {
 
-```
+        setUploadingImage(false);
 
-  
+      }
+
+    };
+
+  };
 
 
   // -----------------------------
@@ -656,3 +669,4 @@ const handleImageUpload = () => {
 }
 
 export default BlogFormPage;
+```
