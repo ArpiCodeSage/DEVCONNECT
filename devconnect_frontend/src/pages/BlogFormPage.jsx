@@ -1,4 +1,3 @@
-```jsx
 import React, {
   useEffect,
   useRef,
@@ -56,13 +55,11 @@ function BlogFormPage() {
 
       try {
 
-        const response =
-          await API.get(`/blogs/${id}`);
+        const response = await API.get(`/blogs/${id}`);
 
         const blog = response.data;
 
-        const username =
-          localStorage.getItem("username");
+        const username = localStorage.getItem("username");
 
         if (blog.username !== username) {
 
@@ -138,8 +135,7 @@ function BlogFormPage() {
 
   const handleImageUpload = () => {
 
-    const input =
-      document.createElement("input");
+    const input = document.createElement("input");
 
     input.setAttribute(
       "type",
@@ -166,8 +162,7 @@ function BlogFormPage() {
 
         setUploadingImage(true);
 
-        const imageData =
-          new FormData();
+        const imageData = new FormData();
 
         imageData.append(
           "image",
@@ -175,16 +170,15 @@ function BlogFormPage() {
         );
 
 
-        // UPLOAD IMAGE TO BACKEND
+        // Upload image to backend
 
-        const response =
-          await API.post(
-            "/uploads/image",
-            imageData
-          );
+        const response = await API.post(
+          "/uploads/image",
+          imageData
+        );
 
 
-        // CREATE FULL PRODUCTION IMAGE URL
+        // Create full production image URL
 
         let imageUrl;
 
@@ -200,20 +194,19 @@ function BlogFormPage() {
         }
 
 
+        // Insert image into Quill editor
+
         const editor =
           quillRef.current.getEditor();
 
-
         const range =
           editor.getSelection(true);
-
 
         editor.insertEmbed(
           range.index,
           "image",
           imageUrl
         );
-
 
         editor.setSelection(
           range.index + 1
@@ -291,15 +284,15 @@ function BlogFormPage() {
 
         [
           "clean"
-        ],
+        ]
 
       ],
 
       handlers: {
         image: handleImageUpload,
-      },
+      }
 
-    },
+    }
 
   };
 
@@ -351,19 +344,17 @@ function BlogFormPage() {
 
       if (isEditing) {
 
-        response =
-          await API.put(
-            `/blogs/${id}`,
-            formData
-          );
+        response = await API.put(
+          `/blogs/${id}`,
+          formData
+        );
 
       } else {
 
-        response =
-          await API.post(
-            "/blogs",
-            formData
-          );
+        response = await API.post(
+          "/blogs",
+          formData
+        );
 
       }
 
@@ -402,13 +393,15 @@ function BlogFormPage() {
 
     return (
 
-      <div className="
-        min-h-screen
-        bg-[#0b0f19]
-        flex
-        items-center
-        justify-center
-      ">
+      <div
+        className="
+          min-h-screen
+          bg-[#0b0f19]
+          flex
+          items-center
+          justify-center
+        "
+      >
 
         <p className="text-slate-500">
           Loading blog...
@@ -423,17 +416,21 @@ function BlogFormPage() {
 
   return (
 
-    <div className="
-      min-h-screen
-      bg-[#0b0f19]
-      px-4
-      py-10
-    ">
+    <div
+      className="
+        min-h-screen
+        bg-[#0b0f19]
+        px-4
+        py-10
+      "
+    >
 
-      <div className="
-        max-w-4xl
-        mx-auto
-      ">
+      <div
+        className="
+          max-w-4xl
+          mx-auto
+        "
+      >
 
 
         {/* BACK */}
@@ -463,11 +460,13 @@ function BlogFormPage() {
 
         <div className="mb-6">
 
-          <h1 className="
-            text-2xl
-            font-bold
-            text-white
-          ">
+          <h1
+            className="
+              text-2xl
+              font-bold
+              text-white
+            "
+          >
 
             {isEditing
               ? "Edit Blog"
@@ -476,11 +475,13 @@ function BlogFormPage() {
           </h1>
 
 
-          <p className="
-            text-slate-500
-            text-sm
-            mt-2
-          ">
+          <p
+            className="
+              text-slate-500
+              text-sm
+              mt-2
+            "
+          >
 
             {isEditing
               ? "Update your blog post."
@@ -508,12 +509,14 @@ function BlogFormPage() {
 
           <div>
 
-            <label className="
-              block
-              text-sm
-              text-slate-300
-              mb-2
-            ">
+            <label
+              className="
+                block
+                text-sm
+                text-slate-300
+                mb-2
+              "
+            >
 
               Title
 
@@ -547,18 +550,22 @@ function BlogFormPage() {
 
           <div className="mt-6">
 
-            <div className="
-              flex
-              items-center
-              justify-between
-              mb-2
-            ">
+            <div
+              className="
+                flex
+                items-center
+                justify-between
+                mb-2
+              "
+            >
 
-              <label className="
-                block
-                text-sm
-                text-slate-300
-              ">
+              <label
+                className="
+                  block
+                  text-sm
+                  text-slate-300
+                "
+              >
 
                 Content
 
@@ -567,10 +574,12 @@ function BlogFormPage() {
 
               {uploadingImage && (
 
-                <span className="
-                  text-xs
-                  text-cyan-400
-                ">
+                <span
+                  className="
+                    text-xs
+                    text-cyan-400
+                  "
+                >
 
                   Uploading image...
 
@@ -595,13 +604,15 @@ function BlogFormPage() {
 
           {/* BUTTONS */}
 
-          <div className="
-            flex
-            items-center
-            justify-end
-            gap-3
-            mt-20
-          ">
+          <div
+            className="
+              flex
+              items-center
+              justify-end
+              gap-3
+              mt-20
+            "
+          >
 
             <Link
               to="/blogs"
@@ -669,4 +680,3 @@ function BlogFormPage() {
 }
 
 export default BlogFormPage;
-```
