@@ -79,7 +79,20 @@ function BlogDetailPage() {
     }
   };
 
+  const fetchLikeStatus = async () => {
+    try {
+      const response = await API.get(`/blogs/${id}/like`);
 
+      setLikeCount(response.data.likeCount);
+      setLiked(response.data.likedByCurrentUser);
+
+    } catch (error) {
+      console.error(
+        "Failed to fetch like status:",
+        error
+      );
+    }
+  };
   // -----------------------------
   // INITIAL LOAD
   // -----------------------------
@@ -88,6 +101,7 @@ function BlogDetailPage() {
 
     fetchBlog();
     fetchComments();
+    fetchLikeStatus();
 
   }, [id]);
 
@@ -331,8 +345,8 @@ function BlogDetailPage() {
                 <span className="text-sm text-slate-500">
                   {blog.createdAt
                     ? new Date(
-                        blog.createdAt
-                      ).toLocaleDateString()
+                      blog.createdAt
+                    ).toLocaleDateString()
                     : ""}
                 </span>
 
@@ -370,12 +384,12 @@ function BlogDetailPage() {
           {/* Content */}
           <div className="mt-8">
 
-           <div
-  className="blog-content text-slate-300 leading-8"
-  dangerouslySetInnerHTML={{
-    __html: DOMPurify.sanitize(blog.content)
-  }}
-/>
+            <div
+              className="blog-content text-slate-300 leading-8"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(blog.content)
+              }}
+            />
 
           </div>
 
@@ -386,11 +400,10 @@ function BlogDetailPage() {
             <button
               onClick={handleLike}
               disabled={likeLoading}
-              className={`flex items-center gap-2 text-sm transition ${
-                liked
+              className={`flex items-center gap-2 text-sm transition ${liked
                   ? "text-red-400"
                   : "text-slate-400 hover:text-red-400"
-              }`}
+                }`}
             >
 
               <Heart
@@ -498,17 +511,17 @@ function BlogDetailPage() {
 
                     {currentUsername ===
                       comment.username && (
-                      <button
-                        onClick={() =>
-                          handleDeleteComment(
-                            comment.id
-                          )
-                        }
-                        className="text-xs text-slate-600 hover:text-red-400 transition"
-                      >
-                        Delete
-                      </button>
-                    )}
+                        <button
+                          onClick={() =>
+                            handleDeleteComment(
+                              comment.id
+                            )
+                          }
+                          className="text-xs text-slate-600 hover:text-red-400 transition"
+                        >
+                          Delete
+                        </button>
+                      )}
 
                   </div>
 
