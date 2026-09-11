@@ -174,15 +174,9 @@ function BlogFormPage() {
         );
 
 
-        const response =
-          await API.post(
-            "/uploads/image",
-            imageData
-          );
-
         const imageUrl = response.data.startsWith("http")
           ? response.data
-          : `http://localhost:8080${response.data}`;
+          : `https://devconnect-backend-m0un.onrender.com${response.data}`;
 
 
         const editor =
