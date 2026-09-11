@@ -134,91 +134,99 @@ function BlogFormPage() {
   // -----------------------------
   // IMAGE UPLOAD
   // -----------------------------
+```javascript
+const handleImageUpload = () => {
 
-  const handleImageUpload = () => {
+  const input =
+    document.createElement("input");
 
-    const input =
-      document.createElement("input");
+  input.setAttribute(
+    "type",
+    "file"
+  );
 
-    input.setAttribute(
-      "type",
-      "file"
-    );
+  input.setAttribute(
+    "accept",
+    "image/*"
+  );
 
-    input.setAttribute(
-      "accept",
-      "image/*"
-    );
-
-    input.click();
+  input.click();
 
 
-    input.onchange = async () => {
+  input.onchange = async () => {
 
-      const file = input.files[0];
+    const file = input.files[0];
 
-      if (!file) {
-        return;
-      }
+    if (!file) {
+      return;
+    }
 
-      try {
+    try {
 
-        setUploadingImage(true);
+      setUploadingImage(true);
 
-        const imageData =
-          new FormData();
+      const imageData =
+        new FormData();
 
-        imageData.append(
-          "image",
-          file
+      imageData.append(
+        "image",
+        file
+      );
+
+      // UPLOAD IMAGE TO BACKEND
+      const response =
+        await API.post(
+          "/uploads/image",
+          imageData
         );
 
-
-        const imageUrl = response.data.startsWith("http")
+      // CREATE FULL PRODUCTION IMAGE URL
+      const imageUrl =
+        response.data.startsWith("http")
           ? response.data
           : `https://devconnect-backend-m0un.onrender.com${response.data}`;
 
 
-        const editor =
-          quillRef.current.getEditor();
+      const editor =
+        quillRef.current.getEditor();
 
 
-        const range =
-          editor.getSelection(true);
+      const range =
+        editor.getSelection(true);
 
 
-        editor.insertEmbed(
-          range.index,
-          "image",
-          imageUrl
-        );
+      editor.insertEmbed(
+        range.index,
+        "image",
+        imageUrl
+      );
 
 
-        editor.setSelection(
-          range.index + 1
-        );
+      editor.setSelection(
+        range.index + 1
+      );
 
 
-      } catch (error) {
+    } catch (error) {
 
-        console.error(
-          "Failed to upload image:",
-          error
-        );
+      console.error(
+        "Failed to upload image:",
+        error
+      );
 
-        alert(
-          "Failed to upload image."
-        );
+      alert(
+        "Failed to upload image."
+      );
 
-      } finally {
+    } finally {
 
-        setUploadingImage(false);
+      setUploadingImage(false);
 
-      }
+    }
 
-    };
+```
 
-  };
+  
 
 
   // -----------------------------
